@@ -1,0 +1,211 @@
+<template>
+  <div class="wip-chart">
+    <h3 class="wip-chart__title">{{ title }}</h3>
+    <div ref="chartEl" class="wip-chart__canvas"></div>
+  </div>
+</template>
+
+<script setup>
+import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
+import * as echarts from 'echarts'
+
+const props = defineProps({
+  title: { type: String, required: true },
+  dates: { type: Array, required: true },
+  series: { type: Object, required: true }, // { le4, d47, gt7, out, in }
+  leftMax: { type: Number, default: 60 },
+  rightMax: { type: Number, default: 120 }
+})
+
+const chartEl = ref(null)
+let chart = null
+
+// Chart ink per docs/layout.md §Colors (green = darker end of the documented
+// #22C38A–#2ED4A0 range, to match the reference screenshot)
+const C = {
+  green: '#22C38A',
+  yellow: '#F2C94C',
+  red: '#EB5545',
+  axis: '#8FB4C8',
+  split: 'rgba(90,190,220,0.15)',
+  legend: '#cfe6f5'
+}
+
+const hideZero = (p) => (p.value ? p.value : '')
+const showAll = (p) => String(p.value)
+
+function buildOption() {
+  const barLabel = {
+    show: true,
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: 600,
+    formatter: hideZero
+  }
+
+  return {
+    backgroundColor: 'transparent',
+    grid: { top: 46, left: 40, right: 44, bottom: 30 },
+    legend: {
+      top: 6,
+      left: 'center',
+      itemGap: 18,
+      itemWidth: 14,
+      itemHeight: 10,
+      textStyle: { color: C.legend, fontSize: 15 },
+      data: [
+        { name: '≤4天', icon: 'rect' },
+        { name: '4-7天', icon: 'rect' },
+        { name: '> 7天', icon: 'rect' },
+        { name: 'OUT', icon: 'circle' },
+        { name: 'IN', icon: 'circle' }
+      ]
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      backgroundColor: 'rgba(6,20,40,0.92)',
+      borderColor: 'rgba(60,150,180,0.5)',
+      textStyle: { color: '#eaf6ff' }
+    },
+    xAxis: {
+      type: 'category',
+      data: props.dates,
+      axisTick: { show: false },
+      axisLine: { lineStyle: { color: C.axis } },
+      axisLabel: { color: C.axis, fontSize: 13 }
+    },
+    yAxis: [
+      {
+        type: 'value',
+        min: 0,
+        max: props.leftMax,
+        interval: props.leftMax / 6,
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { color: C.axis, fontSize: 13 },
+        splitLine: { lineStyle: { color: C.split } }
+      },
+      {
+        type: 'value',
+        min: 0,
+        max: props.rightMax,
+        interval: props.rightMax / 6,
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { color: C.axis, fontSize: 13 },
+        splitLine: { show: false }
+      }
+    ],
+    series: [
+      {
+        name: '≤4天',
+        type: 'bar',
+        stack: 'total',
+        barWidth: 20,
+        itemStyle: { color: C.green },
+        label: { ...barLabel, position: 'inside' },
+        data: props.series.le4
+      },
+      {
+        name: '4-7天',
+        type: 'bar',
+        stack: 'total',
+        itemStyle: { color: C.yellow },
+        label: { ...barLabel, color: '#3a2c00' },
+        data: props.series.d47
+      },
+      {
+        name: '> 7天',
+        type: 'bar',
+        stack: 'total',
+        itemStyle: { color: C.red },
+        label: { ...barLabel, position: 'top', color: '#ffffff' },
+        data: props.series.gt7
+      },
+      {
+        name: 'OUT',
+        type: 'line',
+        yAxisIndex: 1,
+        symbol: 'circle',
+        symbolSize: 6,
+        lineStyle: { color: C.green, width: 2 },
+        itemStyle: { color: C.green },
+        label: {
+          show: true,
+          position: 'top',
+          color: C.green,
+          fontSize: 12,
+          fontWeight: 600,
+          formatter: hideZero
+        },
+        data: props.series.out
+      },
+      {
+        name: 'IN',
+        type: 'line',
+        yAxisIndex: 1,
+        symbol: 'circle',
+        symbolSize: 6,
+        lineStyle: { color: C.yellow, width: 2 },
+        itemStyle: { color: C.yellow },
+        label: {
+          show: true,
+          position: 'top',
+          color: C.yellow,
+          fontSize: 12,
+          fontWeight: 600,
+          // show every point (incl. baseline zeros in amber per spec §322)
+          formatter: showAll
+        },
+        data: props.series.in
+      }
+    ]
+  }
+}
+
+function render() {
+  if (!chart) return
+  chart.setOption(buildOption())
+}
+
+const onResize = () => chart && chart.resize()
+
+onMounted(() => {
+  chart = echarts.init(chartEl.value)
+  render()
+  window.addEventListener('resize', onResize)
+})
+
+watch(() => props.series, render, { deep: true })
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onResize)
+  chart && chart.dispose()
+})
+</script>
+
+<style lang="scss" scoped>
+.wip-chart {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+
+  &__title {
+    text-align: center;
+    font-size: var(--fs-chart-title);
+    font-weight: var(--fw-bold);
+    color: var(--text-title);
+    letter-spacing: 0.5px;
+    padding: 10px 0 4px;
+    text-shadow: var(--glow-text), 0 1px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  &__canvas {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+  }
+}
+</style>

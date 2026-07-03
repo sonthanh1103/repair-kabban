@@ -1,0 +1,80 @@
+// ============================================================
+//  SVR Command Center - Design Tokens
+//  Consolidated variable set per docs/layout.md (§CSS Variables).
+//  Values reference-sized at 1920x1080; the whole stage is scaled
+//  globally (see composables/useScale.js).
+// ============================================================
+
+:root {
+  /* --- Backgrounds --- */
+  --bg-deep: #061224; // darkest page base (corners)
+  --bg-base: #0a1b30; // main dark navy background
+  --bg-panel: #0e2540; // panel fill (slightly lighter)
+  --bg-panel-soft: rgba(18, 48, 82, 0.55); // translucent panel
+  --bg-header-row: #113050; // table header band
+  --bg-header-soft: rgba(17, 48, 80, 0.55); // header band over translucent panel
+
+  /* --- Cyan / teal accents --- */
+  --accent-cyan: #2fe0d0; // primary teal
+  --accent-cyan-2: #17c3e6; // bright cyan (titles, chevrons)
+  --accent-blue: #1e7fd6; // blue accent
+  --line-cyan: rgba(90, 190, 220, 0.18); // grid / borders
+  --border-panel: rgba(60, 170, 210, 0.45); // panel border
+
+  /* --- Panel header gradient (blue -> teal, left->right; blue at the chevron per reference) --- */
+  --head-grad-from: #2456b0;
+  --head-grad-mid: #1a9fb0;
+  --head-grad-to: #26dcc0;
+
+  /* --- Text --- */
+  --text-title: #eaf6ff; // near-white glowing title
+  --text-primary: #ffffff; // data values
+  --text-cyan: #4fd6e8; // labels, table headers
+  --text-cyan-dim: #5fc9d8; // KPI labels
+  --text-muted: #8fb4c8; // axis labels, footer
+  --text-clock: #cfe8f5; // clock / fullscreen
+
+  /* --- Chart data ink --- */
+  --chart-green: #2ed4a0; // <=4 days / OUT line
+  --chart-yellow: #f2c94c; // 4-7 days / IN line
+  --chart-red: #eb5545; // > 7 days
+  --glow-cyan: rgba(47, 224, 208, 0.45);
+
+  /* --- Spacing --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* --- Radius --- */
+  --radius-sm: 6px;
+  --radius: 8px;
+
+  /* --- Shadows / glow --- */
+  --shadow-panel: 0 6px 18px rgba(0, 0, 0, 0.35);
+  --glow-edge: 0 -1px 0 rgba(47, 224, 208, 0.5);
+  --glow-inner: inset 0 0 12px rgba(47, 224, 208, 0.1);
+  --glow-text: 0 0 8px rgba(47, 224, 208, 0.45);
+
+  /* --- Typography --- */
+  --font-serif: "Times New Roman", "Songti SC", "Noto Serif TC", serif;
+  --font-sans: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", "Segoe UI",
+    Roboto, "Microsoft JhengHei", Arial, sans-serif;
+
+  --fs-title: 32px;
+  --fs-chart-title: 25px;
+  --fs-section: 23px;
+  --fs-th: 23px;
+  --fs-td: 23px;
+  --fs-kpi: 38px;
+  --fs-kpi-label: 17px;
+  --fs-clock: 21px;
+  --fs-legend: 15px;
+  --fs-axis: 13px;
+  --fs-footer: 12px;
+  --fw-bold: 700;
+  --fw-med: 500;
+}

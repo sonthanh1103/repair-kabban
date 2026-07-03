@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/vn-dtd-ai-asst/kabban-shots/**)",
+      "Bash(python3 -)"
+    ]
+  }
+}
