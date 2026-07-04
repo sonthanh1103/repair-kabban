@@ -45,9 +45,11 @@ function buildOption() {
 
   return {
     backgroundColor: 'transparent',
-    grid: { top: 46, left: 40, right: 44, bottom: 30 },
+    // slightly darker plotting rectangle only (does not touch the Phase 3
+    // background atmosphere outside the cartesian area)
+    grid: { top: 52, left: 40, right: 44, bottom: 30, show: true, backgroundColor: 'rgba(6,18,34,0.24)', borderWidth: 0 },
     legend: {
-      top: 6,
+      top: 22,
       left: 'center',
       itemGap: 18,
       itemWidth: 14,
@@ -57,8 +59,8 @@ function buildOption() {
         { name: '≤4天', icon: 'rect' },
         { name: '4-7天', icon: 'rect' },
         { name: '> 7天', icon: 'rect' },
-        { name: 'OUT', icon: 'circle' },
-        { name: 'IN', icon: 'circle' }
+        { name: 'OUT' },
+        { name: 'IN' }
       ]
     },
     tooltip: {
@@ -102,7 +104,7 @@ function buildOption() {
         name: '≤4天',
         type: 'bar',
         stack: 'total',
-        barWidth: 20,
+        barWidth: '60%',
         itemStyle: { color: C.green },
         label: { ...barLabel, position: 'inside' },
         data: props.series.le4
@@ -129,7 +131,7 @@ function buildOption() {
         yAxisIndex: 1,
         symbol: 'circle',
         symbolSize: 6,
-        lineStyle: { color: C.green, width: 2 },
+        lineStyle: { color: C.green, width: 1.5 },
         itemStyle: { color: C.green },
         label: {
           show: true,
@@ -147,7 +149,7 @@ function buildOption() {
         yAxisIndex: 1,
         symbol: 'circle',
         symbolSize: 6,
-        lineStyle: { color: C.yellow, width: 2 },
+        lineStyle: { color: C.yellow, width: 1.5 },
         itemStyle: { color: C.yellow },
         label: {
           show: true,

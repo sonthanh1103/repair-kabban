@@ -10,7 +10,7 @@
   --bg-deep: #061224; // darkest page base (corners)
   --bg-base: #0a1b30; // main dark navy background
   --bg-panel: #0e2540; // panel fill (slightly lighter)
-  --bg-panel-soft: rgba(18, 48, 82, 0.55); // translucent panel
+  --bg-panel-soft: rgba(7, 20, 40, 0.8); // translucent panel — darker/more opaque so cards read as solid dark navy (map stays visible only in gaps), per reference
   --bg-header-row: #113050; // table header band
   --bg-header-soft: rgba(17, 48, 80, 0.55); // header band over translucent panel
 
@@ -19,7 +19,7 @@
   --accent-cyan-2: #17c3e6; // bright cyan (titles, chevrons)
   --accent-blue: #1e7fd6; // blue accent
   --line-cyan: rgba(90, 190, 220, 0.18); // grid / borders
-  --border-panel: rgba(60, 170, 210, 0.45); // panel border
+  --border-panel: rgba(55, 150, 195, 0.3); // panel border (softer per reference)
 
   /* --- Panel header gradient (blue -> teal, left->right; blue at the chevron per reference) --- */
   --head-grad-from: #2456b0;

@@ -64,7 +64,7 @@ import {
   position: relative;
   width: 1920px;
   height: 1080px;
-  padding: 12px 34px 12px;
+  padding: 0 34px 12px;
   display: flex;
   flex-direction: column;
 
@@ -72,7 +72,7 @@ import {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     padding-top: 6px;
     min-height: 0;
   }
@@ -81,7 +81,7 @@ import {
     display: grid;
     grid-template-columns: 400px 1fr;
     grid-template-rows: 1fr;
-    gap: 20px;
+    gap: 16px;
     height: 535px;
     flex-shrink: 0;
   }
@@ -89,20 +89,20 @@ import {
   &__left {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    gap: 15px;
+    gap: 12px;
   }
 
   &__right {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    gap: 15px;
+    gap: 12px;
   }
 
   &__charts {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    gap: 14px;
     min-height: 0;
     margin-bottom: 18px;
   }
@@ -117,10 +117,14 @@ import {
 
   &__footer {
     position: absolute;
-    right: 34px;
-    bottom: 30px;
+    // ~32px inset from the right per reference (was 34 -> 36px effective margin)
+    right: 30px;
+    // sit in the clear band below the chart x-axis labels (was 30px, which
+    // stacked the copyright line on top of the P-Card WIP chart labels)
+    bottom: 4px;
     font-size: var(--fs-footer);
-    color: var(--text-muted);
+    // neutral light gray per reference (was cyan-tinted --text-muted)
+    color: #fff;
     letter-spacing: 0.3px;
   }
 }

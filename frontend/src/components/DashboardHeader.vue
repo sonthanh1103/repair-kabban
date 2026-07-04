@@ -58,34 +58,35 @@ onBeforeUnmount(() => clearInterval(timer))
   justify-content: center;
 
   &__banner {
-    width: 900px;
-    height: 74px;
-    border-radius: 22px;
-    // glossy deep-blue plaque per reference: bottom-lit glass — medium royal
-    // blue up top, a dark band ~75% down, then a bright reflection strip along
-    // the bottom edge, with a light-blue rim.
+    width: 948px;
+    height: 78px;
+    border-radius: 0 0 60px 60px;
+    // deep-blue plaque with a THIN, crisp, bright white-cyan RIM outlining the
+    // whole shape (per reference) — not a thick teal glow band.
     background:
+      // thin bright reflection line only at the very bottom edge
       linear-gradient(
         180deg,
-        rgba(150, 196, 240, 0) 70%,
-        rgba(120, 168, 218, 0.55) 87%,
-        rgba(160, 202, 242, 0.82) 94%,
-        rgba(120, 168, 218, 0.2) 100%
+        rgba(185, 242, 255, 0) 89%,
+        rgba(200, 246, 255, 0.9) 96%,
+        rgba(150, 225, 250, 0.25) 100%
       ),
       linear-gradient(
         180deg,
-        #1d5091 0%,
-        #22558f 34%,
-        #163f78 60%,
-        #0d2e58 78%,
-        #123a68 100%
+        #163c78 0%,
+        #1b4783 34%,
+        #12335f 60%,
+        #0a2447 78%,
+        #0e2f54 100%
       );
-    border: 1px solid rgba(150, 192, 236, 0.7);
+    // crisp thin bright rim
+    border: 1px solid rgba(178, 236, 252, 0.62);
     box-shadow:
-      inset 0 1px 1px rgba(205, 228, 255, 0.6),
-      inset 0 -2px 3px rgba(120, 170, 220, 0.25),
-      0 0 22px rgba(40, 120, 200, 0.4),
-      0 8px 20px rgba(0, 0, 0, 0.42);
+      inset 0 1px 1px rgba(210, 240, 255, 0.6),
+      inset 0 -1px 1px rgba(185, 238, 252, 0.6),
+      0 0 30px rgba(45, 150, 220, 0.4),
+      0 8px 22px rgba(15, 100, 160, 0.3),
+      0 8px 20px rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;

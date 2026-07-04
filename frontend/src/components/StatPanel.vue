@@ -32,8 +32,10 @@ defineProps({
     height: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    align-content: center;
-    padding: 0 10px;
+    // raise the labels/values slightly toward the upper area (per reference)
+    // without changing the card size
+    align-content: start;
+    padding: 20px 10px 0;
   }
 
   &__cell {
@@ -41,7 +43,8 @@ defineProps({
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 34px;
+    // denser card: tighter label -> value gap per reference
+    gap: 22px;
   }
 
   &__label {
@@ -59,9 +62,10 @@ defineProps({
     &--link {
       color: var(--text-primary);
       text-decoration: underline;
-      text-decoration-color: var(--text-cyan);
+      // thinner, slightly softer cyan line per reference (was bright 2px)
+      text-decoration-color: rgba(120, 205, 224, 0.85);
       text-underline-offset: 6px;
-      text-decoration-thickness: 2px;
+      text-decoration-thickness: 1.5px;
     }
   }
 }
