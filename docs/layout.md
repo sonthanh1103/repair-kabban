@@ -511,22 +511,46 @@ Suggested consolidated variable set (values reference-sized; scale globally, see
 
 ## Responsive Rules
 
-Goal: **identical composition at every size** — no reflow, no breakpoint changes.
+Goal: **identical composition at every size** — no reflow, no breakpoint changes. This is a
+fixed 16:9 wall board; it scales as a whole, it never re-lays-out.
 
-- **Method A (recommended): fixed stage + transform scale.**
-  Render the board at a fixed `1920×1080` stage, then apply
-  `transform: scale(min(100vw/1920, 100vh/1080)); transform-origin: top center;`
-  and center it. At **1366×768** the scale factor is `min(0.711, 0.711) = 0.711` (both axes match
-  since both are 16:9), so everything shrinks uniformly by ~29% and proportions are preserved
-  exactly. Letterbox with `--bg-deep` bars only if the container aspect ≠ 16:9.
-- **Method B: fluid units.** Express all sizes in `vw`/`vh` or `clamp()` tied to viewport so they
-  scale together (e.g. font-size in `vw`). Keep the same grid fractions (24/76, 8/52/40).
-- **Do not** switch to a stacked/mobile layout, hide columns, or change font ratios. The KPI rail
-  stays left, tables stay right, charts stay in a 2-up row.
-- Charts: re-run ECharts `resize()` on stage scale so canvases stay crisp; keep `grid`, legend,
-  and axis label proportions constant.
-- From **1920×1080 → 1366×768**: uniform 0.711× scale; text remains legible (title ~23px effective,
-  table values ~16px effective). No layout deltas.
+**Method: fixed stage + transform scale (implemented).**
+The board is rendered on a fixed `1920×1080` stage and scaled to fit:
+
+```
+scale = min(innerWidth / 1920, innerHeight / 1080)   // composables/useScale.js
+transform-origin: top center;                        // App.vue .app-stage
+transform: translateX(-50%) scale(scale);            // top-center anchored
+```
+
+- **Anchoring — top-center (not centered).** The stage is pinned to `top: 0; left: 50%` and
+  scaled from `transform-origin: top center`. On viewports taller than 16:9 (portrait / tall
+  screens) the extra space falls **below** the board instead of splitting above and below, so
+  the board never floats in the middle of an empty screen. On 16:9 it fills exactly.
+- **Uniform scale, no layout deltas.** At **1366×768** → `min(0.711, 0.711) = 0.711`; everything
+  shrinks ~29% with proportions preserved exactly. Letterboxing (the atmospheric background)
+  shows only when the viewport aspect ≠ 16:9.
+- **Do not** switch to a stacked/mobile layout, hide columns, or change font ratios. KPI rail
+  stays left, tables stay right, charts stay in a 2-up row — at every size.
+- **Charts:** call ECharts `resize()` on `window` resize so canvases stay crisp; `grid`, legend
+  and axis-label proportions stay constant.
+
+**Small portrait screens — rotate hint (implemented).**
+Because a 1920-wide board scaled to a phone's width makes text unreadable, portrait phones get a
+full-screen prompt instead of the tiny board:
+
+```
+@media (orientation: portrait) and (max-width: 680px) {
+  .app-stage  { display: none; }   /* hide the board */
+  .rotate-hint{ display: flex; }   /* "Xoay ngang / Rotate to landscape" */
+}
+```
+
+- The hint disappears the moment the device is rotated to landscape (orientation query flips),
+  where the board fills the screen and is usable.
+- Tablets (≥ 680px) and all landscape sizes always show the board.
+- The rotate icon animates unless `prefers-reduced-motion: reduce`.
+- This is a *presentation* wrapper only — it does **not** reflow or alter the board itself.
 
 ---
 
