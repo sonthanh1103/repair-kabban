@@ -25,7 +25,7 @@ defineProps({
 .panel-box {
   display: flex;
   flex-direction: column;
-  background: var(--bg-panel-soft);
+//   background: var(--bg-panel-soft);
   border: 1px solid var(--border-panel);
   border-radius: var(--radius);
   box-shadow: var(--glow-inner), var(--shadow-panel);
@@ -36,7 +36,7 @@ defineProps({
     align-items: center;
     gap: 10px;
     height: 46px;
-    padding: 0 var(--space-4) 0 var(--space-3);
+    padding: 0 var(--space-4) 0 var(--space-8);
     background: linear-gradient(
       90deg,
       var(--head-grad-from) 0%,

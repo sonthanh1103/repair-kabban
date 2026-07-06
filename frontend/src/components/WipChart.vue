@@ -86,7 +86,8 @@ function buildOption() {
         axisLine: { show: false },
         axisTick: { show: false },
         axisLabel: { color: C.axis, fontSize: 13 },
-        splitLine: { lineStyle: { color: C.split } }
+        // dashed horizontal gridlines (was solid)
+        splitLine: { lineStyle: { color: C.split, type: 'dashed', dashOffset: 0 } }
       },
       {
         type: 'value',
@@ -114,7 +115,7 @@ function buildOption() {
         type: 'bar',
         stack: 'total',
         itemStyle: { color: C.yellow },
-        label: { ...barLabel, color: '#3a2c00' },
+        label: { ...barLabel, color: '#ffffff' },
         data: props.series.d47
       },
       {
@@ -122,7 +123,7 @@ function buildOption() {
         type: 'bar',
         stack: 'total',
         itemStyle: { color: C.red },
-        label: { ...barLabel, position: 'top', color: '#ffffff' },
+        label: { ...barLabel, position: 'inside', color: '#ffffff' },
         data: props.series.gt7
       },
       {
@@ -195,13 +196,22 @@ onBeforeUnmount(() => {
   min-height: 0;
 
   &__title {
+    // centered title header band per reference: a subtle blue gradient strip
+    // (brighter to the right), white title, thin divider to the plot below
     text-align: center;
+    height: 48px;
+    line-height: 48px;
     font-size: var(--fs-chart-title);
     font-weight: var(--fw-bold);
-    color: var(--text-title);
+    color: #eaf6ff;
     letter-spacing: 0.5px;
-    padding: 10px 0 4px;
-    text-shadow: var(--glow-text), 0 1px 6px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(
+      90deg,
+      rgba(16, 54, 104, 0.5) 0%,
+      rgba(26, 84, 138, 0.6) 100%
+    );
+    border-bottom: 1px solid rgba(70, 150, 190, 0.28);
+    text-shadow: 0 0 9px rgba(130, 195, 240, 0.4), 0 1px 4px rgba(0, 0, 0, 0.4);
   }
 
   &__canvas {

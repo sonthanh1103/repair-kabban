@@ -1,9 +1,53 @@
 <template>
   <header class="dash-header">
     <div class="dash-header__banner">
-      <div class="dash-header__banner-inner">
-        <h1 class="dash-header__title">SVR Command Center-TS維修看板</h1>
-      </div>
+      <!-- SVG frame: rounded-top + beveled sides + rounded bottom corners,
+           cyan glow border, dark-blue fill, top highlight (per requested design) -->
+      <svg
+        class="dash-header__frame"
+        viewBox="0 0 940 74"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="hdrFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#103a63" />
+            <stop offset="55%" stop-color="#0a2647" />
+            <stop offset="100%" stop-color="#071b34" />
+          </linearGradient>
+          <linearGradient id="hdrGlow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5ad4ff" />
+            <stop offset="60%" stop-color="#1477c9" />
+            <stop offset="100%" stop-color="#0a4d8c" />
+          </linearGradient>
+          <linearGradient id="hdrHi" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2" />
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+          </linearGradient>
+          <filter id="hdrBlur" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="4" />
+          </filter>
+          <clipPath id="hdrClip">
+            <path :d="framePath" />
+          </clipPath>
+        </defs>
+
+        <!-- glow layer: same path, blurred cyan stroke, underneath -->
+        <path
+          :d="framePath"
+          fill="none"
+          stroke="url(#hdrGlow)"
+          stroke-width="5"
+          filter="url(#hdrBlur)"
+          opacity="0.9"
+        />
+        <!-- main fill + crisp cyan rim -->
+        <path :d="framePath" fill="url(#hdrFill)" stroke="#5ad4ff" stroke-width="4" />
+        <!-- top highlight sweep, clipped to the shape -->
+        <rect x="26" y="5" width="888" height="28" fill="url(#hdrHi)" clip-path="url(#hdrClip)" />
+      </svg>
+
+      <h1 class="dash-header__title">SVR Command Center-TS維修看板</h1>
     </div>
 
     <div class="dash-header__meta">
@@ -26,6 +70,13 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+// frame outline: all four corners rounded with quadratic Béziers (control at
+// each corner vertex) so the beveled sides join the top/bottom edges smoothly
+// — an `A` arc would kink where it meets an angled side. Symmetric about x=470.
+const framePath =
+  'M 50,5 L 890,5 Q 902,5 899,17 L 887,57 Q 884,69 872,69 ' +
+  'L 68,69 Q 56,69 53,57 L 41,17 Q 38,5 50,5 Z'
 
 const now = ref('')
 let timer = null
@@ -58,47 +109,27 @@ onBeforeUnmount(() => clearInterval(timer))
   justify-content: center;
 
   &__banner {
-    width: 948px;
-    height: 78px;
-    border-radius: 0 0 60px 60px;
-    // deep-blue plaque with a THIN, crisp, bright white-cyan RIM outlining the
-    // whole shape (per reference) — not a thick teal glow band.
-    background:
-      // thin bright reflection line only at the very bottom edge
-      linear-gradient(
-        180deg,
-        rgba(185, 242, 255, 0) 89%,
-        rgba(200, 246, 255, 0.9) 96%,
-        rgba(150, 225, 250, 0.25) 100%
-      ),
-      linear-gradient(
-        180deg,
-        #163c78 0%,
-        #1b4783 34%,
-        #12335f 60%,
-        #0a2447 78%,
-        #0e2f54 100%
-      );
-    // crisp thin bright rim
-    border: 1px solid rgba(178, 236, 252, 0.62);
-    box-shadow:
-      inset 0 1px 1px rgba(210, 240, 255, 0.6),
-      inset 0 -1px 1px rgba(185, 238, 252, 0.6),
-      0 0 30px rgba(45, 150, 220, 0.4),
-      0 8px 22px rgba(15, 100, 160, 0.3),
-      0 8px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    width: 940px;
+    height: 74px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  &__banner-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  // SVG frame fills the banner; overflow visible so the glow isn't clipped
+  &__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
   }
 
   &__title {
+    position: relative; // above the SVG frame
+    z-index: 1;
     font-family: var(--font-serif);
     font-size: var(--fs-title);
     font-weight: var(--fw-bold);

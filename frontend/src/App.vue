@@ -2,9 +2,24 @@
   <div class="app-viewport">
     <div
       class="app-stage"
-      :style="{ transform: `translate(-50%, -50%) scale(${scale})` }"
+      :style="{ transform: `translateX(-50%) scale(${scale})` }"
     >
       <Dashboard />
+    </div>
+
+    <!-- shown only on small portrait screens: the board is a fixed 16:9 wall
+         display, so it reads best in landscape -->
+    <div class="rotate-hint" aria-hidden="true">
+      <div class="rotate-hint__card">
+        <svg viewBox="0 0 24 24" width="48" height="48" aria-hidden="true">
+          <rect x="7" y="2" width="10" height="20" rx="2" />
+          <path d="M9.5 19.5 h5" />
+          <path d="M3 8 a9 9 0 0 1 3-4 M21 16 a9 9 0 0 1-3 4" />
+          <path d="M5.2 4.2 L3 8 L6.8 6.5 M18.8 19.8 L21 16 L17.2 17.5" />
+        </svg>
+        <p class="rotate-hint__title">Xoay ngang thiết bị</p>
+        <p class="rotate-hint__sub">Bảng điều khiển 16:9 hiển thị tốt nhất ở chế độ ngang<br />Rotate your device to landscape</p>
+      </div>
     </div>
   </div>
 </template>
@@ -35,21 +50,91 @@ const { scale } = useScale()
 
 .app-stage {
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 50%;
   width: 1920px;
   height: 1080px;
-  transform-origin: center center;
-  // Scaled decorative texture only (transparent base so the viewport glows show
-  // through here and through the semi-transparent panels): the ghost world map +
-  // faint HUD rings (self-contained SVG, ~5% opacity) and the fine cyan tech grid.
-  background-color: transparent;
-  background-image:
-    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221920%22%20height%3D%221080%22%20viewBox%3D%220%200%201920%201080%22%3E%3Cline%20x1%3D%22560%22%20y1%3D%22470%22%20x2%3D%221360%22%20y2%3D%22470%22%20stroke%3D%22%235abedc%22%20stroke-opacity%3D%220.05%22%20stroke-width%3D%221%22%2F%3E%3Cline%20x1%3D%22560%22%20y1%3D%22560%22%20x2%3D%221360%22%20y2%3D%22560%22%20stroke%3D%22%235abedc%22%20stroke-opacity%3D%220.05%22%20stroke-width%3D%221%22%2F%3E%3Cline%20x1%3D%22560%22%20y1%3D%22650%22%20x2%3D%221360%22%20y2%3D%22650%22%20stroke%3D%22%235abedc%22%20stroke-opacity%3D%220.05%22%20stroke-width%3D%221%22%2F%3E%3Cpath%20d%3D%22M600%2C470%20L690%2C452%20L760%2C495%20L735%2C560%20L660%2C585%20L604%2C530%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M792%2C430%20L835%2C440%20L812%2C472%20L778%2C458%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M712%2C620%20L762%2C606%20L788%2C678%20L744%2C758%20L706%2C700%20L704%2C648%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M930%2C470%20L992%2C462%20L996%2C500%20L940%2C512%20L922%2C488%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M948%2C528%20L1016%2C520%20L1040%2C592%20L1004%2C676%20L958%2C652%20L940%2C580%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M1006%2C452%20L1196%2C444%20L1258%2C500%20L1214%2C552%20L1064%2C540%20L1012%2C500%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M1086%2C548%20L1118%2C542%20L1130%2C590%20L1096%2C596%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M1230%2C560%20L1268%2C556%20L1276%2C586%20L1240%2C592%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Cpath%20d%3D%22M1236%2C672%20L1312%2C666%20L1324%2C722%20L1258%2C734%20L1230%2C700%20Z%22%20fill%3D%22%239fdcff%22%20fill-opacity%3D%220.09%22%20stroke%3D%22%237fe3ff%22%20stroke-opacity%3D%220.13%22%20stroke-width%3D%221.2%22%2F%3E%3Ccircle%20cx%3D%22430%22%20cy%3D%22560%22%20r%3D%2270%22%20fill%3D%22none%22%20stroke%3D%22%2363c8e0%22%20stroke-opacity%3D%220.08%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%22430%22%20cy%3D%22560%22%20r%3D%22120%22%20fill%3D%22none%22%20stroke%3D%22%2363c8e0%22%20stroke-opacity%3D%220.08%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%22430%22%20cy%3D%22560%22%20r%3D%22170%22%20fill%3D%22none%22%20stroke%3D%22%2363c8e0%22%20stroke-opacity%3D%220.08%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%22430%22%20cy%3D%22560%22%20r%3D%226%22%20fill%3D%22%2363c8e0%22%20fill-opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%221500%22%20cy%3D%22560%22%20r%3D%2270%22%20fill%3D%22none%22%20stroke%3D%22%2363c8e0%22%20stroke-opacity%3D%220.08%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%221500%22%20cy%3D%22560%22%20r%3D%22120%22%20fill%3D%22none%22%20stroke%3D%22%2363c8e0%22%20stroke-opacity%3D%220.08%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%221500%22%20cy%3D%22560%22%20r%3D%22170%22%20fill%3D%22none%22%20stroke%3D%22%2363c8e0%22%20stroke-opacity%3D%220.08%22%20stroke-width%3D%221%22%2F%3E%3Ccircle%20cx%3D%221500%22%20cy%3D%22560%22%20r%3D%226%22%20fill%3D%22%2363c8e0%22%20fill-opacity%3D%220.16%22%2F%3E%3C%2Fsvg%3E"),
-    linear-gradient(rgba(90, 190, 220, 0.075) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(90, 190, 220, 0.075) 1px, transparent 1px);
-  background-repeat: no-repeat, repeat, repeat;
-  background-size: 1920px 1080px, 44px 44px, 44px 44px;
-  background-position: center, 0 0, 0 0;
+  // anchor the scaled board to the top-center so tall/portrait viewports don't
+  // leave it floating in the middle with large empty space above and below
+  transform-origin: top center;
+  background: transparent;
+}
+
+// rotate prompt — only on small portrait screens
+.rotate-hint {
+  display: none;
+}
+@media (orientation: portrait) and (max-width: 680px) {
+  .app-stage {
+    display: none;
+  }
+  .rotate-hint {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+
+    &__card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      color: var(--text-clock);
+
+      svg {
+        fill: none;
+        stroke: var(--accent-cyan-2, #17c3e6);
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: drop-shadow(0 0 10px rgba(90, 212, 255, 0.5));
+        animation: rotate-nudge 2.4s ease-in-out infinite;
+      }
+    }
+    &__title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-title, #eaf6ff);
+      letter-spacing: 0.5px;
+    }
+    &__sub {
+      margin: 0;
+      max-width: 280px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted, #8fb4c8);
+    }
+  }
+}
+@keyframes rotate-nudge {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-90deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rotate-hint__card svg { animation: none; }
+}
+.app-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+      url("@/assets/images/world-map.svg")
+      center center / 82% auto no-repeat;
+
+    opacity: .05;
+
+    filter:
+      brightness(0)
+      invert(1)
+      hue-rotate(170deg)
+      saturate(250%);
+
+    z-index: 0;
 }
 </style>

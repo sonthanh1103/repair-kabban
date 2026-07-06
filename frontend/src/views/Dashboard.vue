@@ -64,7 +64,8 @@ import {
   position: relative;
   width: 1920px;
   height: 1080px;
-  padding: 0 34px 12px;
+  // small top margin above the plaque (~6px) per reference
+  padding: 0px 34px 12px;
   display: flex;
   flex-direction: column;
 
@@ -108,7 +109,7 @@ import {
   }
 
   &__chart {
-    background: var(--bg-panel-soft);
+    // background: var(--bg-panel-soft);
     border: 1px solid var(--border-panel);
     border-radius: var(--radius);
     box-shadow: var(--glow-inner), var(--shadow-panel);

@@ -42,7 +42,7 @@ defineProps({
   :deep(.panel-box__body) {
     display: flex;
     flex-direction: column;
-    padding: 6px 8px 8px;
+    padding-top: 1px;
   }
 }
 
@@ -55,8 +55,8 @@ defineProps({
   th,
   td {
     text-align: center;
-    // subtle grid lines per reference (not heavy borders)
-    border: 1px solid rgba(90, 190, 220, 0.15);
+    // visible cyan grid lines per reference (~lum 129, not the faint 0.15)
+    // border: 1px solid rgba(95, 195, 225, 0.3);
   }
 
   thead th {
@@ -64,16 +64,36 @@ defineProps({
     font-size: var(--fs-th);
     font-weight: var(--fw-bold);
     color: var(--text-cyan);
-    // lighter (less opaque) blue header band per reference
-    background: rgba(30, 72, 118, 0.4);
+    // bright blue column-header band per reference (~rgb 35,79,124)
+    background: rgba(54, 106, 160, 0.95);
     letter-spacing: 0.5px;
   }
 
   &__customer {
+    position: relative;
     text-align: left !important;
-    padding-left: 26px;
+    padding-left: 54px;
     font-style: normal;
     color: var(--text-cyan);
+    // ~6px dark gap separating the Customer column from the numeric block
+    // (per reference) — !important beats the lower-specificity `th,td` border
+    border-right: 6px solid transparent !important;
+    // HUD-style chamfer on the bottom-right corner (per reference)
+    clip-path: polygon(0 0, 100% 0, 100% 54%, 95% 100%, 0 100%);
+
+    // bright edge line running along the chamfer
+    &::after {
+      content: "";
+      position: absolute;
+      right: -3px;
+      bottom: 6px;
+      width: 27px;
+      height: 2px;
+      background: rgba(140, 212, 240, 0.95);
+      transform: rotate(-53deg);
+      transform-origin: right center;
+      pointer-events: none;
+    }
   }
 
   tbody td {
@@ -81,19 +101,30 @@ defineProps({
     font-size: var(--fs-td);
     font-weight: var(--fw-med);
     color: var(--text-primary);
-    background: rgba(8, 24, 48, 0.28);
+    // slightly bluer body rows to match reference (~rgb 6,32,55)
+    background: rgba(10, 30, 58, 0.42);
   }
 
-  // barely-visible alternating row striping (middle row lighter, per reference)
+  // per mockup: ONLY the middle (even) row separates its cells with dark GAPS
+  // (spacing, like the Customer↔Total gap — NOT bright border lines). The light
+  // striping band stays continuous vertically; the odd rows (tr1, tr3) have no
+  // gaps between cells.
   tbody tr:nth-child(even) td {
-    background: rgba(24, 56, 92, 0.16);
+    background: rgba(28, 64, 100, 0.34);
+  }
+
+  tbody tr:nth-child(even) td:not(:last-child) {
+    border-right: 4px solid rgba(8, 20, 42, 0.9);
   }
 
   &__rowlabel {
     text-align: left !important;
-    padding-left: 26px;
+    padding-left: 54px;
     color: var(--text-primary);
     font-weight: var(--fw-med);
+    // NOTE: no gap after the label here — only the even row (tr2) gets the
+    // Customer↔Total gap (via the nth-child(even) rule). Odd rows (tr1, tr3)
+    // flow the label into the numbers with no spacing, per mockup.
   }
 
   &__link span {
