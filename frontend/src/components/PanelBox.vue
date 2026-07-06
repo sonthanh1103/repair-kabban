@@ -32,6 +32,7 @@ defineProps({
   overflow: hidden;
 
   &__head {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -45,6 +46,22 @@ defineProps({
       var(--head-grad-to) 100%
     );
     box-shadow: 0 1px 8px rgba(20, 170, 190, 0.35);
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 2px;
+        width: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 1) 50%,
+          transparent 100%
+        );
+    }
   }
 
   &__chevron {

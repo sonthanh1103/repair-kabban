@@ -17,8 +17,8 @@
           <path d="M3 8 a9 9 0 0 1 3-4 M21 16 a9 9 0 0 1-3 4" />
           <path d="M5.2 4.2 L3 8 L6.8 6.5 M18.8 19.8 L21 16 L17.2 17.5" />
         </svg>
-        <p class="rotate-hint__title">Xoay ngang thiết bị</p>
-        <p class="rotate-hint__sub">Bảng điều khiển 16:9 hiển thị tốt nhất ở chế độ ngang<br />Rotate your device to landscape</p>
+        <p class="rotate-hint__title">請將裝置旋轉為橫向</p>
+        <p class="rotate-hint__sub">16:9 儀表板在橫向模式下顯示最佳<br />Rotate your device to landscape</p>
       </div>
     </div>
   </div>
@@ -57,7 +57,12 @@ const { scale } = useScale()
   // anchor the scaled board to the top-center so tall/portrait viewports don't
   // leave it floating in the middle with large empty space above and below
   transform-origin: top center;
-  background: transparent;
+  // fine cyan tech grid — the 44px squares behind the panels
+  background-color: transparent;
+  background-image:
+    linear-gradient(rgba(90, 190, 220, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 190, 220, 0.075) 1px, transparent 1px);
+  background-size: 44px 44px, 44px 44px;
 }
 
 // rotate prompt — only on small portrait screens
@@ -92,7 +97,8 @@ const { scale } = useScale()
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: drop-shadow(0 0 10px rgba(90, 212, 255, 0.5));
-        animation: rotate-nudge 2.4s ease-in-out infinite;
+        transform-origin: center center;
+        animation: rotate-nudge 3s ease-in-out infinite;
       }
     }
     &__title {
@@ -112,8 +118,9 @@ const { scale } = useScale()
   }
 }
 @keyframes rotate-nudge {
-  0%, 60%, 100% { transform: rotate(0deg); }
-  30% { transform: rotate(-90deg); }
+  0%, 15% { transform: rotate(0deg); }        /* portrait */
+  38%, 72% { transform: rotate(-90deg); }     /* rotate to landscape and HOLD */
+  95%, 100% { transform: rotate(0deg); }      /* back to portrait, then repeat */
 }
 @media (prefers-reduced-motion: reduce) {
   .rotate-hint__card svg { animation: none; }

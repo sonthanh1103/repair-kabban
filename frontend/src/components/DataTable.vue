@@ -42,7 +42,7 @@ defineProps({
   :deep(.panel-box__body) {
     display: flex;
     flex-direction: column;
-    padding-top: 1px;
+    padding-top: 2px;
   }
 }
 
